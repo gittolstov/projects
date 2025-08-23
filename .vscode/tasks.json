@@ -11,8 +11,6 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-lm",
-                "-D",
-                "_DEBUG",
                 "-ggdb3",
                 "-std=c++17",
                 "-O0",

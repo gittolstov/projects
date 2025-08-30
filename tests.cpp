@@ -8,12 +8,6 @@
 
 
 
-/*!
-*	reads single Testdata structure
-*	\param[in] stream where the data is taken from
-*	\param[out] Testdata structure with numbers or NAN if EOF
-*	\returns 1 if successful, else 0
-*/
 int readTestdata(FILE *stream, struct Testdata *toChange){
 	double a = NAN, b = NAN, c = NAN;
 	int roots = 0;
@@ -27,11 +21,6 @@ int readTestdata(FILE *stream, struct Testdata *toChange){
 }
 
 
-/*!
-*	performs one test of nRoots function
-*	\param[in] Testdata structure containing test data, inputs, wanted outputs
-*	\return 1 if no errors were found, 0 if there was an error
-*/
 int singularTestNRoots(struct Testdata *data){
 	int amountRoots = 0;
 	double x1 = 0, x2 = 0;
@@ -46,15 +35,15 @@ int singularTestNRoots(struct Testdata *data){
 		);
 		switch ((*data).roots)
 		{
-		case 2:
-			printf("x1 = %lg; x2 = %lg; instead returns %d; x1 = %lg; x2 = %lg;\n", (*data).x1, (*data).x2, amountRoots, x1, x2);
-			break;
-		case 1:
-			printf("x1 = %lg; instead returns %d; x1 = %lg;\n", (*data).x1, amountRoots, x1);
-			break;
-		default:
-			printf("instead returns %d;\n", amountRoots);
-			break;
+			case 2:
+				printf("x1 = %lg; x2 = %lg; instead returns %d; x1 = %lg; x2 = %lg;\n", (*data).x1, (*data).x2, amountRoots, x1, x2);
+				break;
+			case 1:
+				printf("x1 = %lg; instead returns %d; x1 = %lg;\n", (*data).x1, amountRoots, x1);
+				break;
+			default:
+				printf("instead returns %d;\n", amountRoots);
+				break;
 		}
 		return 0;
 	}
@@ -63,38 +52,32 @@ int singularTestNRoots(struct Testdata *data){
 }
 
 
-/*!
-*	unit test for nRoots, prints errors. SIZE max tests
-*	\param[in] address - string with address to file with testdata
-*/
-void testNRoots(char address[]){
+void testNRoots(const char address[]){
 	printf("Testing nRoots...\n");
 
 	FILE *file = fopen(address, "r");
 	if (file == NULL){
-		if ((int) strlen(address) > 100){
-			perror("testNRoots encountered address issue");
-			return;
-		}
-		char a[150];
-		sprintf(a, "testNRoots encountered address issue with file '%s'", address);
-		perror(a);
+		fprintf(stderr, "testNRoots encountered address issue with file '%s'", address);
+		perror("");
 		return;
 	}
 	printf("successfully opened %s\n", address);
-	const int SIZE = 30;
-	struct Testdata tests[SIZE];
-	int flag = 1, i = 0;
-	while (i < SIZE){
-		if (!readTestdata(file, &tests[i])){
+	int flag = 1, i = 0, failed = 0;
+	while (1){
+		struct Testdata test = {};
+		if (!readTestdata(file, &test)){
 			break;
 		}
-		printf("%d. ", i);
-		flag = singularTestNRoots(&tests[i]) && flag;
+		printf("%d. ", i + 1);
+		int currentTestResult = singularTestNRoots(&test);
+		flag = currentTestResult && flag;
+		failed += !currentTestResult;
 		i++;
 	}
 	fclose(file);
 	if (flag){
 		printf("no issues found.\n");
+	} else {
+		printf("failed %d tests out of %d\n", failed, i);
 	}
 }

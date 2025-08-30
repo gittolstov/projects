@@ -1,6 +1,10 @@
 #ifndef OUTPUTS_H
 #define OUTPUTS_H
 
+/*
+*	prints results of equation
+*	\param[in] toPrint Testdata structure with equation results and inputs
+*/
 void printSwitch(struct Testdata);
 /*!
 *	stores quadratic equation

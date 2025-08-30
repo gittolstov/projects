@@ -5,10 +5,6 @@
             "label": "C/C++: gcc build active file",
             "command": "/usr/bin/gcc",
             "args": [
-				"inputs.cpp",
-				"nRoots.cpp",
-				"mathhelpers.cpp",
-				"tests.cpp",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",

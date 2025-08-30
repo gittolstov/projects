@@ -9,22 +9,20 @@
 #include "nRoots.h"
 #include "inputs.h"
 #include "outputs.h"
-#ifdef _DEBUG
-#include "tests.h"
-#endif
 
 /*!
 *	Can solve a quadratic equation in stdin.
+*	Required flag: -c
 *	You type in numbers on different lines and get the answer to your quadratic.
 */
 int main(int argc, char *argv[]){
+	char test[4] = "abc";
+	test[3] = 'd';
 	printf("Мяу!\n");
-#ifdef _DEBUG
-	const int LIM = 100;
-	char address[LIM] = "tests.txt";
-	getTerminalAddressText(argc, argv, LIM, address);
-	testNRoots(address);
-#endif
+	const char *address = "tests.txt";
+	if (!handleTerminalFlags(argc, argv)){
+		return 0;
+	}
 	double a = NAN, b = NAN, c = NAN;
 	double *list[] = {&a, &b, &c};
 	int i = 0;

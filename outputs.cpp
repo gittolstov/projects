@@ -4,10 +4,6 @@
 #include "outputs.h"
 
 
-/*
-*	prints results of equation
-*	\param[in] toPrint Testdata structure with equation results and inputs
-*/
 void printSwitch(struct Testdata toPrint){
 	printf("The inputed equation: (%lg)x^2 + (%lg)x + (%lg) = 0\n", toPrint.coefficients.a, toPrint.coefficients.b, toPrint.coefficients.c);//TODO SDELAT' NOVUYU FUNCTIU
 	switch (toPrint.roots){

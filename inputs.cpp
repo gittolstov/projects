@@ -4,12 +4,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "tests.h"
 
-/*!
-*	Used to get double numbers from input (terminal)
-*	\param[out] n tries to write one double number from stdin into it
-*	\return if no adequate number was received from stdin returns 0, otherwise 1
-*/
+
 int getInputNumber(double *n){
 	assert(n != NULL);
 
@@ -30,8 +27,8 @@ int getInputNumber(double *n){
 		return 0;
 	}
 
-	if (*n == INFINITY){
-		printf("number too large! try again\n");
+	if (isinf(*n)){
+		printf("number is too large! try again\n");
 		return 0;
 	}
 
@@ -40,23 +37,30 @@ int getInputNumber(double *n){
 }
 
 
-/*!
-*	finds first .txt argument
-*	\param[in] argc amount of args
-*	\param[in] argv args
-*	\param[in] limit - max len str
-*	\param[out] str here be .txt
-*/
-int getTerminalAddressText(int argc, char *argv[], int limit, char str[]){
-	for (int i = 0; i < argc; i++){
-		if (strstr(argv[i], ".txt") != NULL){
-			if ((int) strlen(argv[i]) >= limit){
-				printf("file name too big: %s\n", argv[i]);
-				return 0;
+
+int handleTerminalFlags(int argc, char *argv[]){
+	int flag = 0;
+	for (int i = 1; i < argc; i++){
+		if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--test") == 0){
+			i += 1;
+			char str[] = "tests.txt";
+			char *replacer = str;
+			if (i == argc){
+				testNRoots(replacer);
+				break;
 			}
-			strcpy(str, argv[i]);
-			return 1;
+			if (strstr(argv[i], ".txt") != NULL){
+				replacer = argv[i];
+				testNRoots(replacer);
+			}
+		} else if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0){
+			printf("Quadratic equation solver welcomes you! Here is list of commands:\n"
+				   "-t [filename].txt | --test [filename].txt  performs unit tests. filename is optional.\n"
+				   "--help  list all commands\n"
+				   "-c calculate quadratic equation");
+		} else if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--calculate") == 0){
+			flag = 1;
 		}
 	}
-	return 0;
+	return flag;
 }
